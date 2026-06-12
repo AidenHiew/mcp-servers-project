@@ -14,7 +14,6 @@ docs = {
     "spec.txt": "These specifications define the technical requirements for the equipment.",
 }
 
-# TODO: Write a tool to read a doc
 @mcp.tool(
     name="read_doc_contents",
     description="Read the contents of a file and return it as string."
@@ -26,7 +25,6 @@ def read_document(
         raise ValueError(f"Doc with id {doc_id} not found")
     return docs[doc_id]
 
-# TODO: Write a tool to edit a doc
 @mcp.tool(
     name="edit_document",
     description="Edit a document by replacing a string in the document contents with a new string."
@@ -76,15 +74,15 @@ def format_document(
     doc_id: str=Field(description="ID of the document to format")
 ) -> list[base.Message]:
     prompt = f"""
-    Your goal is to reformat a document to be written with markdown syntax. 
+    Your goal is to reformat a document using markdown syntax.
 
-    The Id of the doucment you need to reformt is:
+    The ID of the document you need to reformat is:
     <document_id>
     {doc_id}
     </document_id>
 
-    Aa in hearders, bullet points, tables, etc as necessary. feel fre to use any markdown syntax that would be appropriate. The content of the document is as follows:
-    use the 'edit_document' tool to edit the document. After the document is reformatted, return the newly formatted document contents as the final answer.
+    Add headers, bullet points, tables, etc. as necessary. Feel free to use any markdown syntax that would be appropriate.
+    Use the 'edit_document' tool to apply the changes. After the document is reformatted, return the newly formatted document contents as the final answer.
     """
     return [base.UserMessage(prompt)]
 
