@@ -33,13 +33,14 @@ class CliChat(Chat):
         return await self.doc_client.get_prompt(command, {"doc_id": doc_id})
 
     async def _extract_resources(self, query: str) -> str:
-        mentions = [word[1:] for word in query.split() if word.startswith("@")]
+        tokens = [word.strip(".,;:?!()[]{}<>\"'") for word in query.split()]
+        mentions = [token[1:] for token in tokens if token.startswith("@")]
 
         doc_ids = await self.list_docs_ids()
         mentioned_docs: list[Tuple[str, str]] = []
 
         for doc_id in doc_ids:
-            if doc_id in mentions:
+            if doc_id in mentions or doc_id in tokens or doc_id in query:
                 content = await self.get_doc_content(doc_id)
                 mentioned_docs.append((doc_id, content))
 
